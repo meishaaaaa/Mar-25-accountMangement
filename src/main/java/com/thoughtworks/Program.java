@@ -102,20 +102,39 @@ public class Program {
         UserRepository repository = new UserRepository();
         String rightPassword = repository.getPassword(id);
 
-        if (Objects.equals(rightPassword, dataSplit[1])) {
-            UserInfo user = repository.getInfo(id);
-            System.out.printf("%s，欢迎回来！\n" +
-                    "您的手机号是%s，邮箱是%s", id, user.getMobile(), user.getEmail());
+        if (repository.getErrorNum(dataSplit[0]) < 3) {
+            if (Objects.equals(rightPassword, dataSplit[1])) {
+                UserInfo user = repository.getInfo(id);
+                System.out.printf("%s，欢迎回来！\n" +
+                        "您的手机号是%s，邮箱是%s", id, user.getMobile(), user.getEmail());
+                start();
+            } else {
+                wrongInput(dataSplit[0]);
+            }
         } else {
+            wrongInput(dataSplit[0]);
+        }
+    }
+
+    public void wrongInput(String account) {
+        UserRepository repository = new UserRepository();
+        repository.updateError(account);
+
+        if (repository.getErrorNum(account) < 3) {
             System.out.println("密码或用户名错误\n" +
                     "请重新输入用户名和密码：");
             Scanner sc2 = new Scanner(System.in);
             String loginInfo = sc2.nextLine();
             login(loginInfo);
         }
-
+        if (repository.getErrorNum(account) >= 3) {
+            System.out.println("您已3次输错密码，账号被锁定");
+            start();
+        }
     }
 
 }
+
+
 
 
