@@ -1,15 +1,16 @@
-package com.thoughtworks;
+package com.thoughtworks.Repository;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class UserInfo {
+import com.thoughtworks.InputException.InputException;
+
+public class User {
     private String account;
     private String mobile;
     private String email;
     private String passWord;
 
-    public UserInfo() {
+
+    public User() {
 
     }
 
@@ -19,11 +20,8 @@ public class UserInfo {
     }
 
     public void setAccount(String account) {
-        Pattern p = Pattern.compile("[a-zA-Z0-9_]{2,10}");
-        Matcher m = p.matcher(account);
-
-        if (!m.matches()) {
-            throw new InputException();
+        if (!account.matches("[a-zA-Z0-9_]{2,10}")) {
+            throw new InputException("用户名");
         }
         this.account = account;
     }
@@ -33,11 +31,8 @@ public class UserInfo {
     }
 
     public void setMobile(String mobile) {
-        Pattern p = Pattern.compile("^1\\d{10}$");
-        Matcher m = p.matcher(mobile);
-
-        if (!m.matches()) {
-            throw new InputException();
+        if (!mobile.matches("^1\\d{10}$")) {
+            throw new InputException("手机号");
         }
         this.mobile = mobile;
     }
@@ -49,7 +44,7 @@ public class UserInfo {
     public void setEmail(String email) {
 
         if (!email.contains("@")) {
-            throw new InputException();
+            throw new InputException("邮箱");
         }
         this.email = email;
     }
@@ -59,14 +54,12 @@ public class UserInfo {
     }
 
     public void setPassWord(String passWord) {
-        Pattern p = Pattern.compile("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$");
-        Matcher m = p.matcher(passWord);
-
-        if (!m.matches()) {
-            throw new InputException();
+        if (!passWord.matches("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$")) {
+            throw new InputException("密码");
         }
         this.passWord = passWord;
     }
 
 
 }
+
